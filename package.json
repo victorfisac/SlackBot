@@ -1,0 +1,16 @@
+{
+  "name": "slack_jokebot",
+  "version": "1.0.0",
+  "description": "Slackbot that tells random jokes",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Brad Traversy",
+  "license": "MIT",
+  "dependencies": {
+    "@k3rn31p4nic/google-translate-api": "^1.1.0",
+    "axios": "^0.18.0",
+    "slackbots": "^1.1.0"
+  }
+}
