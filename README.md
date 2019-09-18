@@ -1,8 +1,9 @@
 # SlackBot
-> Simple slackbot built with Node.js and Slackbots.js that helps me with the most boring and tedious tasks of my journey.
+Simple slackbot built with Node.js and Slackbots.js that helps me with the most boring and tedious tasks of my journey.
 
-## API:
+## API
 [https://github.com/mishk0/slack-bot-api](https://github.com/mishk0/slack-bot-api)
+
 [https://github.com/k3rn31p4nic/google-translate-api](https://github.com/k3rn31p4nic/google-translate-api)
 
 ## Install
