@@ -1,21 +1,28 @@
 const SlackBot = require('slackbots');
 const translate = require('@k3rn31p4nic/google-translate-api');
 
-const botToken = 'xoxb-755822931329-761825468228-LfTpeRnPxa6RX3oxrnMvyiSl';
-const botName = 'JARVIS';
+const botToken = 'xoxb-94313697859-783296825408-XN7dDIU39UAyjHl7CYIAEJsW';
+const botName = 'C3PO';
 
-const channel = 'slack-tools';
-const welcomeMessage = 'Buenos días, señor!';
-const response = 'Es el 30 de septiembre, señor.';
+// const botToken = 'xoxb-755822931329-761825468228-LfTpeRnPxa6RX3oxrnMvyiSl';
+// const botName = 'JARVIS';
+
+const channel = 'c3po-testing';
+const welcomeMessage = 'Hello! I am C3PO, human cyborg relations... \n*Use @C3PO translate KEY {sentence to translate}* (without {}) and I will translate it to *Spanish, Italian, French and Portuguese*.\nRemember to write the sentence parameter in English.\nFor example: *@C3PO translate HELLO_WORLD hello world*\nwill return: *HELLO_WORLD,,hello world,hola mundo,ciao mondo,bonjour le monde,óla mundo*';
 
 const bot = new SlackBot({
   token: botToken,
   name: botName
 });
 
+function sleep(delay) {
+  var start = new Date().getTime();
+  while (new Date().getTime() < start + delay);
+}
+
 // Start Handler
 bot.on('start', () => {
-  bot.postMessageToChannel(channel, welcomeMessage);
+  SendTip();
 });
 
 // Error Handler
@@ -34,19 +41,87 @@ bot.on('message', data => {
 
 // Response to data
 function handleMessage(message) {
-  if (message.includes(' cumple')) {
-    Send(channel, response);
+  var split = message.split(' ');
+
+  var command = false;
+  var sentence = '';
+  var key = '';
+
+  for (var i = 0; i < split.length; i++)
+  {
+    if (i == 1)
+    {
+      if (split[i] == 'translate')
+        command = true;
+    }
+    else if (i == 2)
+    {
+      key = split[i];
+    }
+    else if (i > 2)
+    {
+      if (i == split.length - 1)
+      {
+        sentence += split[i];
+      } 
+      else
+      {
+        sentence += split[i] + ' ';
+      }
+    }
+  }
+
+  console.log('Is Translate Command? - ' + command);
+
+  if (command)
+  {
+    console.log('Key: ' + key);
+
+    console.log('Source text: ' + sentence);
+
+    var result = key + ',,' + sentence;
+    
+    translate(sentence, { to: 'es' }).then(res => {
+      console.log('Spanish: ' + res.text);
+      result += ',' + res.text;
+
+      translate(sentence, { to: 'it' }).then(res2 => {
+        console.log('Italian: ' + res.text);
+        result += ',' + res2.text;
+  
+        translate(sentence, { to: 'fr' }).then(res3 => {
+          console.log('French: ' + res.text);
+          result += ',' + res3.text;
+    
+          translate(sentence, { to: 'pt' }).then(res4 => {
+            console.log('Portuguese: ' + res.text);
+            result += ',' + res4.text;
+      
+            bot.postMessageToChannel(channel, result);
+          }).catch(err4 => {
+            console.error(err);
+            bot.postMessageToChannel(channel, 'Error translating to Portuguese: ' + err4);
+            SendTip();
+          });
+        }).catch(err3 => {
+          console.error(err);
+          bot.postMessageToChannel(channel, 'Error translating to French: ' + err3);
+          SendTip();
+        });
+      }).catch(err2 => {
+        console.error(err);
+        bot.postMessageToChannel(channel, 'Error translating to Italian: ' + err2);
+        SendTip();
+      });
+    }).catch(err => {
+      console.error(err);
+      bot.postMessageToChannel(channel, 'Error translating to Spanish: ' + err);
+      SendTip();
+    });
   }
 }
 
-// Send message to channel
-function Send(channel, response)
+function SendTip()
 {
-  translate('Mi nombre es Victor', { to: 'en' }).then(res => {
-    console.log(res.text);
-    bot.postMessageToChannel(channel, res.text);
-  }).catch(err => {
-    console.error(err);
-    bot.postMessageToChannel(channel, err);
-  });
+  bot.postMessageToChannel(channel, welcomeMessage);
 }
