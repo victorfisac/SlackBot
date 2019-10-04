@@ -7,7 +7,7 @@ const botName = 'C3PO';
 // const botToken = 'xoxb-755822931329-761825468228-LfTpeRnPxa6RX3oxrnMvyiSl';
 // const botName = 'JARVIS';
 
-const channel = 'c3po-testing';
+const channel = 'unity-team';
 const welcomeMessage = 'Hello! I am C3PO, human cyborg relations... \n*Use @C3PO translate KEY {sentence to translate}* (without {}) and I will translate it to *Spanish, Italian, French and Portuguese*.\nRemember to write the sentence parameter in English.\nFor example: *@C3PO translate HELLO_WORLD hello world*\nwill return: *HELLO_WORLD,,hello world,hola mundo,ciao mondo,bonjour le monde,óla mundo*';
 
 const bot = new SlackBot({
