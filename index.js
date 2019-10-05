@@ -22,7 +22,7 @@ function sleep(delay) {
 
 // Start Handler
 bot.on('start', () => {
-  SendTip();
+  console.log('bot started');
 });
 
 // Error Handler
