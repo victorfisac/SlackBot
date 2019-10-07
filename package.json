@@ -1,12 +1,12 @@
 {
-  "name": "slack_jokebot",
+  "name": "slackbot_c3po",
   "version": "1.0.0",
-  "description": "Slackbot that tells random jokes",
+  "description": "Slackbot to support with translations",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
-  "author": "Brad Traversy",
+  "author": "Victor Fisac",
   "license": "MIT",
   "dependencies": {
     "@k3rn31p4nic/google-translate-api": "^1.1.0",
