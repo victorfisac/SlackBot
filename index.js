@@ -24,7 +24,7 @@ function sleep(delay) {
 bot.on('start', () => {
   console.log('bot started');
 
-  bot.postMessageToChannel('Dani Santeugini', 'Simpsonen Aghr?');
+  bot.postMessageToUser('Dani Santeugini', 'Simpsonen Aghr?');
   bot.postMessageToChannel('unity-team', "Hi there! I'm ready to translate the whole galaxy. Let me know if you need something... :learning:");
 });
 
