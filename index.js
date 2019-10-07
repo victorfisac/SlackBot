@@ -24,7 +24,6 @@ function sleep(delay) {
 bot.on('start', () => {
   console.log('bot started');
 
-  bot.postMessageToUser('Dani Santeugini', 'Simpsonen Aghr?');
   bot.postMessageToChannel('unity-team', "Hi there! I'm ready to translate the whole galaxy. Let me know if you need something... :learning:");
 });
 
@@ -44,6 +43,7 @@ bot.on('message', data => {
 
 // Response to data
 function handleMessage(message) {
+  
   var split = message.split(' ');
 
   var command = false;
