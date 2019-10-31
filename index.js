@@ -78,6 +78,8 @@ function handleMessage(message) {
   {
     console.log('Key: ' + key);
 
+    sentence = sentence.replace('Spike', '{0}');
+
     console.log('Source text: ' + sentence);
 
     var result = key + ',,' + sentence;
@@ -87,15 +89,15 @@ function handleMessage(message) {
       result += ',' + res.text;
 
       translate(sentence, { to: 'it' }).then(res2 => {
-        console.log('Italian: ' + res.text);
+        console.log('Italian: ' + res2.text);
         result += ',' + res2.text;
   
         translate(sentence, { to: 'fr' }).then(res3 => {
-          console.log('French: ' + res.text);
+          console.log('French: ' + res3.text);
           result += ',' + res3.text;
     
           translate(sentence, { to: 'pt' }).then(res4 => {
-            console.log('Portuguese: ' + res.text);
+            console.log('Portuguese: ' + res4.text);
             result += ',' + res4.text;
       
             bot.postMessageToChannel(channel, result);
