@@ -4,11 +4,9 @@ const translate = require('@k3rn31p4nic/google-translate-api');
 const botToken = 'xoxb-94313697859-783296825408-XN7dDIU39UAyjHl7CYIAEJsW';
 const botName = 'C3PO';
 
-// const botToken = 'xoxb-755822931329-761825468228-LfTpeRnPxa6RX3oxrnMvyiSl';
-// const botName = 'JARVIS';
 
 const channel = 'game-developers-translations';
-const welcomeMessage = 'Hello! I am C3PO, human cyborg relations... \n*Use @C3PO translate KEY {sentence to translate}* (without {}) and I will translate it to *Spanish, Italian, French and Portuguese*.\nRemember to write the sentence parameter in English.\nFor example: *@C3PO translate HELLO_WORLD hello world*\nwill return: *HELLO_WORLD,,hello world,hola mundo,ciao mondo,bonjour le monde,óla mundo*';
+const tipMessage = 'Hello! I am C3PO, human cyborg relations... \n*Use @C3PO translate KEY {sentence to translate}* (without {}) and I will translate it to *Spanish, Italian, French and Portuguese*.\nRemember to write the sentence parameter in English.\nFor example: *@C3PO translate HELLO_WORLD hello world*\nwill return: *HELLO_WORLD,,hello world,hola mundo,ciao mondo,bonjour le monde,óla mundo*';
 
 const bot = new SlackBot({
   token: botToken,
@@ -23,6 +21,7 @@ function sleep(delay) {
 // Start Handler
 bot.on('start', () => {
   console.log('bot started');
+  SendWelcome();
 });
 
 // Error Handler
@@ -36,12 +35,47 @@ bot.on('message', data => {
     return;
   }
 
-  handleMessage(data.text);
+  var author = getUserById(data.user);
+  handleMessage(data.text, author);
 });
 
+function getUserById(id) {
+  return bot.users.filter(function (user) {
+      return user.id == id;
+  })[0];
+}
+
+// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
+
+process.stdin.resume();
+process.stdin.setEncoding('utf8');
+
+process.stdin.on('data', function (text) {
+  if (text.includes('answer'))
+  {
+    var split = text.split(' | ');
+
+    if ((split.length > 2) && split[0] == 'answer')
+    {
+      if (split[1] == 'channel')
+      {
+        bot.postMessageToChannel(split[2], split[3]);
+      }
+      else (split[1] == 'user')
+      {
+        bot.postMessageToUser(split[2], split[3]);
+      }
+    }
+  }
+});
+
+// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
+
 // Response to data
-function handleMessage(message) {
-  
+function handleMessage(message, author) {
+  console.log(author.name + ': ' + message);
   var split = message.split(' ');
 
   var command = false;
@@ -72,15 +106,14 @@ function handleMessage(message) {
     }
   }
 
-  console.log('Is Translate Command? - ' + command);
-
   if (command)
   {
+    console.log('------------ Starting translation ------------');
     console.log('Key: ' + key);
 
     sentence = sentence.replace('Spike', '{0}');
 
-    console.log('Source text: ' + sentence);
+    console.log('Source: ' + sentence);
 
     var result = key + ',,' + sentence;
     
@@ -99,6 +132,8 @@ function handleMessage(message) {
           translate(sentence, { to: 'pt' }).then(res4 => {
             console.log('Portuguese: ' + res4.text);
             result += ',' + res4.text;
+
+            console.log('----------------------------------------------');
       
             bot.postMessageToChannel(channel, result);
           }).catch(err4 => {
@@ -124,7 +159,12 @@ function handleMessage(message) {
   }
 }
 
+function SendWelcome()
+{
+  bot.postMessageToChannel(channel, tipMessage);
+}
+
 function SendTip()
 {
-  bot.postMessageToChannel(channel, welcomeMessage);
+  bot.postMessageToChannel(channel, tipMessage);
 }
