@@ -5,7 +5,7 @@ const botToken = 'xoxb-94313697859-783296825408-XN7dDIU39UAyjHl7CYIAEJsW';
 const botName = 'C3PO';
 
 
-const channel = 'game-developers-translations';
+const translationsChannel = 'game-developers-translations';
 const tipMessage = 'Hello! I am C3PO, human cyborg relations... \n*Use @C3PO translate KEY {sentence to translate}* (without {}) and I will translate it to *Spanish, Italian, French and Portuguese*.\nRemember to write the sentence parameter in English.\nFor example: *@C3PO translate HELLO_WORLD hello world*\nwill return: *HELLO_WORLD,,hello world,hola mundo,ciao mondo,bonjour le monde,óla mundo*';
 
 const bot = new SlackBot({
@@ -36,12 +36,23 @@ bot.on('message', data => {
   }
 
   var author = getUserById(data.user);
-  handleMessage(data.text, author);
+  var channel = getChannelById(data.channel);
+
+  if (channel)
+    handleMessage(data.text, author, channel.name);
+  else
+    handleMessage(data.text, author, '');
 });
 
 function getUserById(id) {
   return bot.users.filter(function (user) {
       return user.id == id;
+  })[0];
+}
+
+function getChannelById(id) {
+  return bot.channels.filter(function (channel) {
+      return channel.id == id;
   })[0];
 }
 
@@ -74,7 +85,13 @@ process.stdin.on('data', function (text) {
 // ------------------------------------------------------------------------
 
 // Response to data
-function handleMessage(message, author) {
+function handleMessage(message, author, channel) {
+  
+  if (channel != '' && channel != translationsChannel)
+  {
+    return;
+  }
+
   console.log(author.name + ': ' + message);
   var split = message.split(' ');
 
@@ -135,25 +152,25 @@ function handleMessage(message, author) {
 
             console.log('----------------------------------------------');
       
-            bot.postMessageToChannel(channel, result);
+            bot.postMessageToChannel(translationsChannel, result);
           }).catch(err4 => {
             console.error(err);
-            bot.postMessageToChannel(channel, 'Error translating to Portuguese: ' + err4);
+            bot.postMessageToChannel(translationsChannel, 'Error translating to Portuguese: ' + err4);
             SendTip();
           });
         }).catch(err3 => {
           console.error(err);
-          bot.postMessageToChannel(channel, 'Error translating to French: ' + err3);
+          bot.postMessageToChannel(translationsChannel, 'Error translating to French: ' + err3);
           SendTip();
         });
       }).catch(err2 => {
         console.error(err);
-        bot.postMessageToChannel(channel, 'Error translating to Italian: ' + err2);
+        bot.postMessageToChannel(translationsChannel, 'Error translating to Italian: ' + err2);
         SendTip();
       });
     }).catch(err => {
       console.error(err);
-      bot.postMessageToChannel(channel, 'Error translating to Spanish: ' + err);
+      bot.postMessageToChannel(translationsChannel, 'Error translating to Spanish: ' + err);
       SendTip();
     });
   }
@@ -161,10 +178,10 @@ function handleMessage(message, author) {
 
 function SendWelcome()
 {
-  bot.postMessageToChannel(channel, tipMessage);
+  bot.postMessageToChannel(translationsChannel, tipMessage);
 }
 
 function SendTip()
 {
-  bot.postMessageToChannel(channel, tipMessage);
+  bot.postMessageToChannel(translationsChannel, tipMessage);
 }
