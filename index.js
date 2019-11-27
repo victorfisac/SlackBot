@@ -150,9 +150,18 @@ function handleMessage(message, author, channel) {
             console.log('Portuguese: ' + res4.text);
             result += ',' + res4.text;
 
-            console.log('----------------------------------------------');
+            translate(sentence, { to: 'de' }).then(res5 => {
+              console.log('German: ' + res5.text);
+              result += ',' + res5.text;
+
+              console.log('----------------------------------------------');
       
-            bot.postMessageToChannel(translationsChannel, result);
+              bot.postMessageToChannel(translationsChannel, result);
+            }).catch(err5 => {
+              console.error(err);
+              bot.postMessageToChannel(translationsChannel, 'Error translating to German: ' + err5);
+              SendTip();
+            });
           }).catch(err4 => {
             console.error(err);
             bot.postMessageToChannel(translationsChannel, 'Error translating to Portuguese: ' + err4);
