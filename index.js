@@ -21,7 +21,6 @@ function sleep(delay) {
 // Start Handler
 bot.on('start', () => {
   console.log('bot started');
-  SendWelcome();
 });
 
 // Error Handler
@@ -98,6 +97,15 @@ function handleMessage(message, author, channel) {
   var command = false;
   var sentence = '';
   var key = '';
+
+  if (split.length == 2)
+  {
+    if (split[1] == 'help')
+    {
+      SendWelcome();
+      return;
+    }
+  }
 
   for (var i = 0; i < split.length; i++)
   {
